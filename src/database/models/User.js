@@ -22,7 +22,7 @@ module.exports = (sequelize, DataTypes) => {
         },
 
         password: {
-            type: DataTypes.STRING(45),
+            type: DataTypes.STRING(60),
             allowNull: false
         }
 
@@ -30,7 +30,7 @@ module.exports = (sequelize, DataTypes) => {
 
     let config = {
         tablename: 'users',
-        timestamps: true
+        timestamps: false
     }
 
     const User = sequelize.define(alias, cols, config);

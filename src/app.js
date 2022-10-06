@@ -4,6 +4,7 @@ const app = express();
 const path = require('path');
 const methodOverride =  require('method-override');
 const Sequelize = require("sequelize");
+const cors = require('cors');
 
 
 // ************ ROUTERS REQUIRE'S ************ //
@@ -23,6 +24,10 @@ const publicPath = path.resolve(__dirname, './public');
 app.use(express.static(publicPath));
 // METHODS PUT AND DELETE //
 app.use(methodOverride('_method'));
+// CONFIG EXPRESS //
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
+app.use(cors());
 
 
 // ROUTES //
