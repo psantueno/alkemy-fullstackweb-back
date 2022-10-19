@@ -18,14 +18,10 @@ const usersController = {
 
     register: (req, res) => {
 
-        console.log("------------------")
-        console.log(req.body)
-        console.log("------------------")
-
         const { errors } = validationResult(req);
 
         if (errors.length > 0) {
-            console.log(errors)
+            errors.map( (object) => {return delete object.value});  // se eliminan los valores por seguridad. 
             return res.send({ errors });
         }
 
@@ -65,7 +61,34 @@ const usersController = {
                 })
                 .catch(error => res.send(error));
         }
+    },
+
+    login: async (req, res) => {
+
+        const { errors } = validationResult(req);
+
+        if (errors.length > 0) {
+            errors.map( (object) => {return delete object.value});  // se eliminan los valores por seguridad. 
+            return res.send({ errors });
+        }
+
+        const user = await Users.findOne({
+            where: { email: req.body.email }
+        });
+
+        const passCorrect = user === null 
+        ? false 
+        : await bcryptjs.compareSync(req.body.password, user.password);
+
+
+        if (!(user && passCorrect)) {
+            res.status(401).json({ msg: "Usuario o contraseña inválida." });   // no se debe aclarar cual es el incorrecto por 
+        } else {                                                               //protección contra hackeos. 
+            res.send({ name: user.name })
+        }
+
     }
+
 }
 
 module.exports = usersController;
